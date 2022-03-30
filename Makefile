@@ -1,9 +1,8 @@
 NAME = solong.a
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Iheaders -c
+CFLAGS = -Wall -Werror -Wextra -Iheaders -I . -c
 
 MLX_LINUX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
-MLX_FLAGS = -Imlx -Lmlx -lmlx -framework OpenGL -framework AppKit
 
 RM = rm -f
 
@@ -24,18 +23,8 @@ $(NAME):
 	cp printf/libftprintf.a $(NAME)
 	$(CC) $(CFLAGS) $(SRCS) $(GET_NEXT_LINE) -D BUFFER_SIZE=100
 	$(OBJ_DEST)
-	ar rcs $(NAME) $(OBJS) mlx/libmlx.a
-	$(CC) main.c $(NAME) $(MLX_FLAGS) -Iheaders -o solong
-#	ar rcs $(NAME) $(OBJS) mlx_linux/libmlx_Linux.a
-#	$(CC) main.c $(NAME) $(MLX_LINUX_FLAGS) -Iheaders -o solong
-
-test:
-	$(MAKE) bonus -C ./printf
-	cp printf/libftprintf.a $(NAME)
-	$(CC) $(CFLAGS) $(SRCS) $(GET_NEXT_LINE) -D BUFFER_SIZE=100
-	$(OBJ_DEST)
-	ar rcs $(NAME) $(OBJS) mlx/libmlx.a
-	$(CC) test.c $(NAME) $(MLX_FLAGS) -Iheaders -o test
+	ar rcs $(NAME) $(OBJS) mlx_linux/libmlx_Linux.a
+	$(CC) main.c $(NAME) $(MLX_LINUX_FLAGS) -Iheaders -o solong
 
 clean:
 	$(MAKE) clean -C ./printf

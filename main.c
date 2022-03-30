@@ -11,97 +11,61 @@
 /* ************************************************************************** */
 
 #include "solong.h"
+#include <stdio.h>
 
-/*	Prints the map with the updated positions. This will work differently
-	when graphics are added. */
+/*	Loops until exit is found or exit is forced. Player commands are
+	currently entered using scanf. */
 
-void	print_map(char **map, t_coor *pixel)
+void	loop_function(t_list *map_list, t_tile *tile)
 {
-	int	i;
+	char	*input;
+	char	**map;
 
-	i = 0;
-	while (map[i] && i <= pixel->x_max)
+	map = map_init(map_list);
+	rectangle_check(map);
+	find_pieces(map, tile);
+	if (error_check(map, tile))
+		return ;
+	print_map(map);
+	while (tile->quit)
 	{
-		ft_printf("%s", map[i]);
-		i++;
-	}
-	ft_printf("\n");
-}
-
-/*	Checks the bounds of the map to find where the player, exit and
-	collectible are and sets their coordinates accordingly. This will
-	need to be changed to account for multiple collectibles and multiple
-	exits. */
-
-void	find_pieces(char **map, t_coor *location)
-{
-	int	x;
-	int	y;
-
-	x = 0;
-	y = 0;
-	while (map[x][y] && map[x][y] == '1')
-	{
-		y++;
-	}
-	location->y_max = y - 1;
-	y = 1;
-	x = 1;
-	while (x < location->x_max)
-	{
-		if (map[x][y] == 'P')
-		{
-			location->x_player = x;
-			location->y_player = y;
-		}
-		if (map[x][y] == 'C')
-		{
-			location->x_collect = x;
-			location->y_collect = y;
-		}
-		if (map[x][y] == 'E')
-		{
-			location->x_exit = x;
-			location->y_exit = y;
-		}
-		if (y < location->y_max - 1)
-			y++;
-		else
-		{
-			y = 1;
-			x++;
-		}
+		ft_printf("Number of Moves: %i\n", tile->move_count);
+		tile->move_count++;
+		input = malloc(10);
+		scanf("%s", input);
+		if (!ft_strcmp(input, "w") || !ft_strcmp(input, "a")
+			|| !ft_strcmp(input, "s") || !ft_strcmp(input, "d"))
+			move_check(input, map, tile);
+		if (!ft_strcmp(input, "exit"))
+			tile->quit = 0;
+		free(input);
+		input = NULL;
 	}
 }
 
-/*	Initialise map. Need to add check that file entered is .ber.
-	Error checking needed for at least one player, collectible and
-	exit.  */
+/*	Initialise map. */
 
 int	main(int ac, char **av)
 {
-	char	**map;
 	char	*line;
 	int		fd;
-	int		i;
-	t_coor	*location;
+	t_tile	*tile;
+	t_list	*map_list;
 
-	location = malloc(sizeof(*location));
+	tile = tile_init();
 	if (ac != 2)
+	{
+		ft_printf("Error\nIncorrect Number of Arguments.\n");
 		return (1);
+	}
+	valid_input(av[1]);
 	fd = open(av[1], O_RDONLY);
 	line = get_next_line(fd);
-	map = malloc(sizeof(*map) * 10);//need to figure out number of lines
-	i = 0;
+	map_list = ft_lstnew(line);
 	while (line)
 	{
-		map[i] = ft_strdup(line);
-		//ft_printf("%s", map[i]);
 		line = get_next_line(fd);
-		i++;
+		ft_lstadd_back(&map_list, ft_lstnew(line));
 	}
-	location->x_max = i - 1;
-	ft_printf("\n");
-	//loop_function(map, location);
-	user_input(map, location);
+	loop_function(map_list, tile);
 }
