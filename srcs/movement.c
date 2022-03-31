@@ -1,10 +1,35 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/03/31 16:20:55 by jbrown            #+#    #+#             */
+/*   Updated: 2022/03/31 16:20:57 by jbrown           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "solong.h"
+
+/*	Updates the player position and replaces the ground where the player
+	was previously standing. If the player was standing at the exit, it will
+	place that image on top of the ground tile. */
+
+void	map_update(t_mlx *mlx, t_tile *tile, int x, int y)
+{
+	mlx_put_image_to_window(mlx, mlx->win, mlx->ground, x * 16, y * 16);
+	if (tile->exit_swap)
+		mlx_put_image_to_window(mlx, mlx->win, mlx->exit, x * 16 + 2, y * 16);
+	mlx_put_image_to_window(mlx, mlx->win, mlx->player,
+		tile->player->x * 16, tile->player->y * 16);
+}
 
 /*	Checks what was on the space that the player just moved to. If
 	it was an exit, it will check that the collectible has been picked up.
-	If it hasn't, it will save the location of the exit. If it finds the
-	collectible, the collectible flag is set. It then swaps the position
-	the player came from with '0' and the position the player moved 
+	If it hasn't, it will save the location of the exit. If it finds a
+	collectible, the collectible counter is increased. It then swaps the 
+	position the player came from with '0' and the position the player moved 
 	to with 'P' */
 
 void	move_player(char **map, t_tile *tile, int x, int y)
@@ -40,9 +65,7 @@ void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 	x = tile->player->x;
 	y = tile->player->y;
 	if (input == 13 && map[y - 1][x] != '1')
-	{
 		tile->player->y--;
-	}
 	if (input == 0 && map[y][x - 1] != '1')
 		tile->player->x--;
 	if (input == 1 && map[y + 1][x] != '1')
@@ -53,8 +76,8 @@ void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 	{
 		tile->move_count++;
 		ft_printf("Number of Moves: %i\n", tile->move_count);
+		map_update(mlx, tile, x, y);
 		move_player(map, tile, x, y);
-		update_map(tile, map, mlx);
 	}
 }
 
