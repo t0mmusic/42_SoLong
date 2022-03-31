@@ -7,49 +7,67 @@
 	the player came from with '0' and the position the player moved 
 	to with 'P' */
 
-void	move_player(char **map, t_coor *pixel, int x, int y)
+void	move_player(char **map, t_tile *tile, int x, int y)
 {
-	map[x][y] = '0';
-	if (pixel->exit_swap)
+	map[y][x] = '0';
+	if (tile->exit_swap)
 	{
-		map[x][y] = 'E';
-		pixel->exit_swap = 0;
+		map[y][x] = 'E';
+		tile->exit_swap = 0;
 	}
-	if (!pixel->collect && map[pixel->x_player][pixel->y_player] == 'E')
-		pixel->exit_swap = 1;
-	if (pixel->collect && map[pixel->x_player][pixel->y_player] == 'E')
+	if (map[tile->player->y][tile->player->x] == 'E')
 	{
-		ft_printf("Success!\n");
-		pixel->exit = 0;
+		if (tile->item_count != tile->item_total)
+			tile->exit_swap = 1;
+		else
+		{
+			ft_printf("Success!\n");
+			tile->quit = 0;
+		}
 	}
-	if (map[pixel->x_player][pixel->y_player] == 'C')
-		pixel->collect = 1; 
-	map[pixel->x_player][pixel->y_player] = 'P';
-} //make a pixel collect function that returns 1 if all collectibles are found
+	if (map[tile->player->y][tile->player->x] == 'C')
+		tile->item_count++;
+	map[tile->player->y][tile->player->x] = 'P';
+}
 
 /*	Checks to see if the players movements have changed. */
 
-void	move_check(int input, char **map, t_coor *pixel, t_mlx *mlx)
+void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 {
 	int	x;
 	int	y;
 
-	x = pixel->x_player;
-	y = pixel->y_player;
-	if (input == 13 && map[x - 1][y] != '1')
+	x = tile->player->x;
+	y = tile->player->y;
+	if (input == 13 && map[y - 1][x] != '1')
 	{
-		pixel->x_player--;
+		tile->player->y--;
 	}
-	if (input == 0 && map[x][y - 1] != '1')
-		pixel->y_player--;
-	if (input == 1 && map[x + 1][y] != '1')
-		pixel->x_player++;
-	if (input == 2 && map[x][y + 1] != '1')
-		pixel->y_player++;
-	if (!(x == pixel->x_player && y == pixel->y_player))
+	if (input == 0 && map[y][x - 1] != '1')
+		tile->player->x--;
+	if (input == 1 && map[y + 1][x] != '1')
+		tile->player->y++;
+	if (input == 2 && map[y][x + 1] != '1')
+		tile->player->x++;
+	if (!(x == tile->player->x && y == tile->player->y))
 	{
-		move_player(map, pixel, x, y);
-		//print_map(map, pixel);
-		update_map(pixel, map, mlx);
+		tile->move_count++;
+		ft_printf("Number of Moves: %i\n", tile->move_count);
+		move_player(map, tile, x, y);
+		update_map(tile, map, mlx);
 	}
+}
+
+/*	Prints the direction of movement	*/
+
+void	print_movement(int input)
+{
+	if (input == 13)
+		ft_printf("Up\n");
+	if (input == 0)
+		ft_printf("Left\n");
+	if (input == 1)
+		ft_printf("Down\n");
+	if (input == 2)
+		ft_printf("Right\n");
 }
