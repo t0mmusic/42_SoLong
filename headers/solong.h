@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   solong.h                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/04/01 10:32:03 by jbrown            #+#    #+#             */
+/*   Updated: 2022/04/01 10:32:05 by jbrown           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef SOLONG_H
 # define SOLONG_H
 
@@ -6,7 +18,7 @@
 # include <fcntl.h>
 # include "mlx.h"
 
-typedef	struct	s_coor
+typedef struct s_coor
 {
 	int	x;
 	int	y;
@@ -16,11 +28,11 @@ typedef struct s_tile
 {
 	struct s_coor	*player;
 	struct s_coor	*max;
-	int		item_count;
-	int		item_total;
-	int		move_count;
-	int		quit;
-	int		exit_swap;
+	int				item_count;
+	int				item_total;
+	int				move_count;
+	int				quit;
+	int				exit_swap;
 }	t_tile;
 
 typedef struct s_mlx
@@ -74,6 +86,13 @@ void	find_map_max(char **map, t_tile *tile);
 
 void	valid_input(char *str);
 void	error_check(char **map, t_tile *tile);
-void	rectangle_check(char **map);
+void	rectangle_check(char **map, t_tile *tile);
+
+/*	Exit program	*/
+
+void	exit_program(t_tile *tile, char **map);
+void	free_mlx(t_mlx *mlx);
+void	free_map(char **map);
+void	free_tile(t_tile *tile);
 
 #endif

@@ -55,7 +55,9 @@ void	move_player(char **map, t_tile *tile, int x, int y)
 	map[tile->player->y][tile->player->x] = 'P';
 }
 
-/*	Checks to see if the players movements have changed. */
+/*	Checks to see if the player can move in the direction chosen. If they
+	can, the move counter is increased and move_player and map_update are
+	called to update the player's position. */
 
 void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 {

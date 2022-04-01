@@ -135,13 +135,13 @@ void	error_check(char **map, t_tile *tile)
 	if (error)
 	{
 		ft_printf("Error\nMap Border Must Be Solid.\n");
-		exit(1);
+		exit_program(tile, map);
 	}
 	error += player_check(map, tile);
 	if (error)
 	{
 		ft_printf("Error\nMap Must Contain Exactly One Player.\n");
-		exit(1);
+		exit_program(tile, map);
 	}
 	error += tile_check(map, tile, 'E');
 	error += tile_check(map, tile, 'C');
@@ -149,6 +149,6 @@ void	error_check(char **map, t_tile *tile)
 	{
 		ft_printf("Error\nMap Must Contain At Least");
 		ft_printf(" One Collectable And One Exit.\n");
-		exit(1);
+		exit_program(tile, map);
 	}
 }

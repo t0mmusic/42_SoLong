@@ -70,6 +70,11 @@ t_mlx	*init_mlx(t_tile *tile)
 	return (mlx);
 }
 
+/*	Checks to see if the key that was pressed by the user
+	was valid for movement or to exit the program. If it was
+	for movement, it will use move_check to see if the movement
+	is possible, then it will print the direction of movement. */
+
 int	key_press(int key, t_data *data)
 {
 	t_mlx	*mlx;
@@ -84,12 +89,18 @@ int	key_press(int key, t_data *data)
 		move_check(key, map, tile, mlx);
 	if (!(tile->quit) || key == 53)
 	{
-		mlx_destroy_window(mlx->mlx, mlx->win);
-		exit(0);
+		free_mlx(mlx);
+		free(data);
+		exit_program(tile, map);
 	}
 	print_movement(key);
 	return (0);
 }
+
+/*	Sets up the mlx loop so that the program stays open to
+	recieve user inputs. It also compiles all variables used
+	by the program into a single structure for the mlx_key_hook
+	function.	*/
 
 void	user_input(t_list *map_list, t_tile *tile)
 {
@@ -99,7 +110,7 @@ void	user_input(t_list *map_list, t_tile *tile)
 	char	**map;
 
 	map = map_init(map_list);
-	rectangle_check(map);
+	rectangle_check(map, tile);
 	find_pieces(map, tile);
 	error_check(map, tile);
 	data = malloc(sizeof(*data));

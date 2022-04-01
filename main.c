@@ -24,8 +24,8 @@ int	main(int ac, char **av)
 		ft_printf("Error\nIncorrect Number of Arguments.\n");
 		return (1);
 	}
-	tile = tile_init();
 	valid_input(av[1]);
+	tile = tile_init();
 	fd = open(av[1], O_RDONLY);
 	line = get_next_line(fd);
 	map_list = ft_lstnew(line);
@@ -35,4 +35,5 @@ int	main(int ac, char **av)
 		ft_lstadd_back(&map_list, ft_lstnew(line));
 	}
 	user_input(map_list, tile);
+	return (0);
 }
