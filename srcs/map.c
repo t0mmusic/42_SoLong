@@ -61,10 +61,10 @@ void	set_coordinates(t_tile *tile, char c, int x, int y)
 /*	Checks the bounds of the map to find where the player and
 	collectibles are and sets their coordinates accordingly.	*/
 
-void	find_pieces(char **map, t_tile *tile)
+t_enemy	*find_pieces(char **map, t_tile *tile, t_enemy *list)
 {
-	int	x;
-	int	y;
+	int		x;
+	int		y;
 
 	y = 1;
 	x = 1;
@@ -73,6 +73,10 @@ void	find_pieces(char **map, t_tile *tile)
 	{
 		if (map[y][x] == 'P' || map[y][x] == 'C')
 			set_coordinates(tile, map[y][x], x, y);
+		if (map[y][x] == 'B')
+		{
+			list = add_enemy(list, new_enemy(x, y));
+		}
 		if (x < tile->max->x)
 			x++;
 		else
@@ -81,4 +85,5 @@ void	find_pieces(char **map, t_tile *tile)
 			y++;
 		}
 	}
+	return (list);
 }

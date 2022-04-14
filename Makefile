@@ -1,6 +1,8 @@
-NAME = solong.a
+NAME = solong
 CC = gcc
-CFLAGS = -Wall -Werror -Wextra -Iheaders -c
+CFLAGS = -Wall -Werror -Wextra -Iheaders
+
+PRINTF_A = printf/libftprintf.a
 
 MLX_LINUX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 MLX_FLAGS = -Imlx -Lmlx -lmlx -framework OpenGL -framework AppKit
@@ -9,43 +11,36 @@ RM = rm -f
 
 SRCS = srcs/*.c
 
-OBJ_DEST = mv *.o srcs
-
 CHECKER = tester/checker.c
 
 GET_NEXT_LINE = gnl/get_next_line.c
 
-OBJS = $(SRCS:.c=.o)
+REMOVE_MESSAGE = echo "removing object files"
+REMOVE_ARCHIVE = echo "removing archives and application"
+COMPILE_PRINTF = echo "compiling printf archive..."
+COMPILE_SOLONG = echo "compiling solong application"
+COMPILE_COMPLETE = echo "Ready! To play the game:\n./solong maps/<map name>"
 
 all: $(NAME)
 
 $(NAME):
-	$(MAKE) bonus -C ./printf
-	cp printf/libftprintf.a $(NAME)
-	$(CC) $(CFLAGS) $(SRCS) $(GET_NEXT_LINE) -D BUFFER_SIZE=100
-	$(OBJ_DEST)
-	ar rcs $(NAME) $(OBJS) mlx/libmlx.a
-	$(CC) main.c $(NAME) $(MLX_FLAGS) -Iheaders -o solong
-#	ar rcs $(NAME) $(OBJS) mlx_linux/libmlx_Linux.a
-#	$(CC) main.c $(NAME) $(MLX_LINUX_FLAGS) -Iheaders -o solong
-
-test:
-	$(MAKE) bonus -C ./printf
-	cp printf/libftprintf.a $(NAME)
-	$(CC) $(CFLAGS) $(SRCS) $(GET_NEXT_LINE) -D BUFFER_SIZE=100
-	$(OBJ_DEST)
-	ar rcs $(NAME) $(OBJS) mlx/libmlx.a
-	$(CC) test.c $(NAME) $(MLX_FLAGS) -Iheaders -o test
+	@$(COMPILE_PRINTF)
+	@$(MAKE) bonus -C ./printf >/dev/null
+	@$(COMPILE_SOLONG)
+	@$(CC) $(CFLAGS) main.c $(SRCS) $(PRINTF_A) $(GET_NEXT_LINE) $(MLX_FLAGS) -D BUFFER_SIZE=100 -o $(NAME) >/dev/null
+	@$(COMPILE_COMPLETE)
+bonus: all
 
 clean:
-	$(MAKE) clean -C ./printf
-	$(MAKE) clean -C ./printf/libft
-	$(RM) $(OBJS)
+	@$(REMOVE_MESSAGE)
+	@$(MAKE) clean -C ./printf >/dev/null
+	@$(MAKE) clean -C ./printf/libft >/dev/null
 
 fclean: clean
-	$(MAKE) fclean -C ./printf
-	$(MAKE) clean -C ./printf/libft
-	$(RM) $(NAME)
+	@$(REMOVE_ARCHIVE)
+	@$(MAKE) fclean -C ./printf >/dev/null
+	@$(MAKE) clean -C ./printf/libft >/dev/null
+	@$(RM) $(NAME) >/dev/null
 
 re: fclean all
 

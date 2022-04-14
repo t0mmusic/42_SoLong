@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:20:55 by jbrown            #+#    #+#             */
-/*   Updated: 2022/03/31 16:20:57 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/14 10:05:58 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,13 @@
 
 void	map_update(t_mlx *mlx, t_tile *tile, int x, int y)
 {
-	mlx_put_image_to_window(mlx, mlx->win, mlx->ground, x * 16, y * 16);
+	mlx_put_image_to_window(mlx, mlx->win, mlx->ground,
+		x * mlx->dim->x, y * mlx->dim->y);
 	if (tile->exit_swap)
-		mlx_put_image_to_window(mlx, mlx->win, mlx->exit, x * 16 + 2, y * 16);
+		mlx_put_image_to_window(mlx, mlx->win, mlx->exit,
+			x * mlx->dim->x + 2, y * mlx->dim->y);
 	mlx_put_image_to_window(mlx, mlx->win, mlx->player,
-		tile->player->x * 16, tile->player->y * 16);
+		tile->player->x * mlx->dim->x, tile->player->y * mlx->dim->y);
 }
 
 /*	Checks what was on the space that the player just moved to. If

@@ -51,38 +51,3 @@ t_tile	*tile_init(void)
 	tile->exit_swap = 0;
 	return (tile);
 }
-
-/*	Checks that map is rectangular. */
-
-void	rectangle_check(char **map, t_tile *tile)
-{
-	int		i;
-	size_t	len;
-
-	i = 0;
-	while (map[i + 1])
-	{
-		len = ft_strlen(map[i + 1]);
-		if (len != ft_strlen(map[i]))
-		{
-			ft_printf("Error\nMap Must Be Rectangular.\n");
-			exit_program(tile, map);
-		}
-		i++;
-	}
-}
-
-/*	Checks that input map has a .ber extension.	*/
-
-void	valid_input(char *str)
-{
-	int	ext;
-
-	ext = ft_strlen(str) - 4;
-	if (ft_strcmp(&str[ext], ".ber"))
-	{
-		ft_printf("Error\nInvalid Map Extension.\n");
-		check_leaks();
-		exit(1);
-	}
-}

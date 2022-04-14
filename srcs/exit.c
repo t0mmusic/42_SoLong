@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 10:30:00 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/01 10:30:02 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/14 10:00:39 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	free_tile(t_tile *tile)
 void	free_mlx(t_mlx *mlx)
 {
 	mlx_destroy_window(mlx->mlx, mlx->win);
+	free(mlx->dim);
 	free(mlx);
 }
 
@@ -43,6 +44,5 @@ void	exit_program(t_tile *tile, char **map)
 {
 	free_tile(tile);
 	free_map(map);
-	check_leaks();
 	exit(0);
 }

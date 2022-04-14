@@ -34,6 +34,6 @@ int	main(int ac, char **av)
 		line = get_next_line(fd);
 		ft_lstadd_back(&map_list, ft_lstnew(line));
 	}
-	user_input(map_list, tile);
+	collect_data(map_list, tile);
 	return (0);
 }

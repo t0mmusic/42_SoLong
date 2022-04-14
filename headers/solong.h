@@ -35,19 +35,29 @@ typedef struct s_tile
 	int				exit_swap;
 }	t_tile;
 
+typedef struct s_enemy
+{
+	struct s_coor	*coor;
+	int				direction;
+	void			*next;
+}	t_enemy;
+
 typedef struct s_mlx
 {
-	void	*mlx;
-	void	*win;
-	void	*player;
-	void	*ground;
-	void	*wall;
-	void	*exit;
-	void	*item;
+	struct s_coor	*dim;
+	void			*mlx;
+	void			*win;
+	void			*player;
+	void			*ground;
+	void			*wall;
+	void			*exit;
+	void			*item;
+	void			*enemy;
 }	t_mlx;
 
 typedef struct s_data
 {
+	struct s_enemy	*enemy;
 	struct s_tile	*tile;
 	struct s_mlx	*mlx;
 	char			**map;
@@ -60,6 +70,7 @@ void	print_map(char **map);
 
 /*	Initialisation	*/
 
+void	collect_data(t_list *map_list, t_tile *tile);
 void	initialise_map(t_tile *tile, char **map, t_mlx *mlx);
 t_mlx	*init_mlx(t_tile *tile);
 char	**map_init(t_list *map_list);
@@ -67,7 +78,7 @@ t_tile	*tile_init(void);
 
 /*	Input from users	*/
 
-void	user_input(t_list *map_list, t_tile *tile);
+void	user_input(t_data *data);
 int		key_press(int key, t_data *data);
 
 /*	Movement functions	*/
@@ -78,9 +89,16 @@ void	print_movement(int input);
 
 /*	Map Location Functions	*/
 
-void	find_pieces(char **map, t_tile *tile);
+t_enemy	*find_pieces(char **map, t_tile *tile, t_enemy *list);
 void	set_coordinates(t_tile *tile, char c, int x, int y);
 void	find_map_max(char **map, t_tile *tile);
+
+/*	Enemy Functions	*/
+
+t_enemy	*new_enemy(int x, int y);
+t_enemy	*add_enemy(t_enemy *list, t_enemy *current);
+void	enemy_movement(t_enemy *enemy, t_tile *tile, char **map, t_mlx *mlx);
+void	player_collision(t_enemy *enemy, t_tile *tile);
 
 /*	Error checking	*/
 
