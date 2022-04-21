@@ -6,7 +6,7 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:20:55 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/14 10:05:58 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/21 10:06:04 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,9 @@ void	move_player(char **map, t_tile *tile, int x, int y)
 }
 
 /*	Checks to see if the player can move in the direction chosen. If they
-	can, the move counter is increased and move_player and map_update are
-	called to update the player's position. */
+	can, move_player and map_update are called to update the player's position.
+	The move count will update regardless of whether the player can move or not
+	because the enemies can still move on this turn. */
 
 void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 {
@@ -78,11 +79,11 @@ void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 		tile->player->x++;
 	if (!(x == tile->player->x && y == tile->player->y))
 	{
-		tile->move_count++;
-		ft_printf("Number of Moves: %i\n", tile->move_count);
 		map_update(mlx, tile, x, y);
 		move_player(map, tile, x, y);
 	}
+	tile->move_count++;
+	ft_printf("Number of Moves: %i\n", tile->move_count);
 }
 
 /*	Prints the direction of movement	*/

@@ -6,7 +6,7 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 10:57:57 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/14 16:30:48 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/21 09:56:31 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,17 @@ t_enemy	*new_enemy(int x, int y)
 
 /*	If the coordinates are set to 0,0, it will remove the first element
 	of the list and replace it with the updated coordinates. Otherwise
-	it will add the new enemy to the next element of the list.	*/
+	it will add the new enemy to the end of the list.	*/
 
 t_enemy	*add_enemy(t_enemy *list, t_enemy *current)
 {
-	t_enemy	*tmp;
+	t_enemy	*head;
 
+	head = list;
 	if (list->coor->x == 0)
 	{
-		tmp = list;
-		list = current;
-		free(tmp);
+		head = current;
+		free(list);
 	}
 	else
 	{
@@ -51,13 +51,13 @@ t_enemy	*add_enemy(t_enemy *list, t_enemy *current)
 			list = list->next;
 		list->next = current;
 	}
-	return (list);
+	return (head);
 }
 
 /*	Updates the position of the enemy on the map. The position the enemy was
-	previously in becomes a '0', the position it is moving to will be a 'B'.
-	Needs to be updated so that enemy movement goes before player movement
-	to prevent player image from being overridden.	*/
+	previously in becomes a '0', the position it is moving to will be a 'B'. 
+	It also updates the screen images, placing a floor tile where the enemy
+	was and an enemy tile where the enemy has moved to.	*/
 
 void	update_enemy(t_enemy *enemy, char **map, t_mlx *mlx)
 {
@@ -72,21 +72,23 @@ void	update_enemy(t_enemy *enemy, char **map, t_mlx *mlx)
 
 /*	Movement position is set to either increase or decrease in either the x
 	coordinate. If the movement is impossible, it will flip from positive to
-	negative or vice versa by multiplying by negative 1. It will not move
-	on the turn that it has collided, and will not move at all if it is stuck.
-	Need to be updated to stop enemy from moving through wall if it cannot
-	move in either direction.	*/
+	negative or vice versa by multiplying by negative 1. It will move on each
+	turn if it can move onto a free space or into the player.	*/
 
 void	enemy_movement(t_enemy *enemy, t_tile *tile, char **map, t_mlx *mlx)
 {
 	t_enemy	*bad;
 
 	bad = enemy;
+	player_collision(bad, tile);
 	while (bad)
 	{
-		if (map[bad->coor->y][bad->coor->x + bad->direction] != '0')
+		if (map[bad->coor->y][bad->coor->x + bad->direction] != '0'
+			&& map[bad->coor->y][bad->coor->x + bad->direction] != 'P')
 			bad->direction *= -1;
-		update_enemy(bad, map, mlx);
+		if (map[bad->coor->y][bad->coor->x + bad->direction] == '0'
+			|| map[bad->coor->y][bad->coor->x + bad->direction] == 'P')
+			update_enemy(bad, map, mlx);
 		bad = bad->next;
 	}
 	player_collision(enemy, tile);
@@ -97,10 +99,17 @@ void	enemy_movement(t_enemy *enemy, t_tile *tile, char **map, t_mlx *mlx)
 
 void	player_collision(t_enemy *enemy, t_tile *tile)
 {
-	if (tile->player->x == enemy->coor->x
-		&& tile->player->y == enemy->coor->y)
+	t_enemy	*bad;
+
+	bad = enemy;
+	while (bad)
 	{
-		ft_printf("Game over!");
-		exit (1);
+		if (tile->player->x == bad->coor->x
+			&& tile->player->y == bad->coor->y)
+		{
+			ft_printf("Game over!");
+			tile->quit = 0;
+		}
+		bad = bad->next;
 	}
 }

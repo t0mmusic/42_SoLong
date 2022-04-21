@@ -18,6 +18,21 @@
 # include <fcntl.h>
 # include "mlx.h"
 
+typedef struct s_num
+{
+	void	*zero;
+	void	*one;
+	void	*two;
+	void	*three;
+	void	*four;
+	void	*five;
+	void	*six;
+	void	*seven;
+	void	*eight;
+	void	*nine;
+	int		position;
+}	t_num;
+
 typedef struct s_coor
 {
 	int	x;
@@ -53,10 +68,12 @@ typedef struct s_mlx
 	void			*exit;
 	void			*item;
 	void			*enemy;
+	void			*ins;
 }	t_mlx;
 
 typedef struct s_data
 {
+	struct s_num	*num;
 	struct s_enemy	*enemy;
 	struct s_tile	*tile;
 	struct s_mlx	*mlx;
@@ -75,6 +92,7 @@ void	initialise_map(t_tile *tile, char **map, t_mlx *mlx);
 t_mlx	*init_mlx(t_tile *tile);
 char	**map_init(t_list *map_list);
 t_tile	*tile_init(void);
+t_num	*get_numbers(t_mlx *mlx, t_num *num);
 
 /*	Input from users	*/
 
@@ -112,5 +130,11 @@ void	exit_program(t_tile *tile, char **map);
 void	free_mlx(t_mlx *mlx);
 void	free_map(char **map);
 void	free_tile(t_tile *tile);
+void	free_enemy(t_enemy *enemy);
+
+/*	Print functions	*/
+
+void	image_put(t_mlx *mlx, void *img, int x, int y);
+void	print_count(int count, t_mlx *mlx, t_tile *tile, t_num *num);
 
 #endif

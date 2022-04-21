@@ -12,8 +12,8 @@
 
 #include "solong.h"
 
-/*	Prints the map with the updated positions. This will work differently
-	when graphics are added. */
+/*	Prints the map with the updated positions. This was used to display the map
+	in the terminal but is not included in the final project. */
 
 void	print_map(char **map)
 {
