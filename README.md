@@ -17,5 +17,8 @@ An example of a valid map would be:<br><br>
 10001000001<br>
 11111111111<br><br>
 The map must be rectangular to be valid.
+## Bonus
+The game now has enemies that move back and forth and cause a 'game over' when the player interacts with them.
+There is also a counter in the window showing how many moves the player has made.
 ## Status
-Ongoing. Game logic has been completed and image rendering is working, but a few behind the scenes improvements must be made.
+Ongoing. Game is complete with bonuses and ready to be submitted.
