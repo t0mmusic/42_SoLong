@@ -6,7 +6,7 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 10:57:57 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/21 09:56:31 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:11:04 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ t_enemy	*add_enemy(t_enemy *list, t_enemy *current)
 	if (list->coor->x == 0)
 	{
 		head = current;
+		free(list->coor);
 		free(list);
 	}
 	else
@@ -57,17 +58,17 @@ t_enemy	*add_enemy(t_enemy *list, t_enemy *current)
 /*	Updates the position of the enemy on the map. The position the enemy was
 	previously in becomes a '0', the position it is moving to will be a 'B'. 
 	It also updates the screen images, placing a floor tile where the enemy
-	was and an enemy tile where the enemy has moved to.	*/
+	was and an enemy tile where the enemy has moved to, with a refreshed floor
+	tile underneath it.	*/
 
 void	update_enemy(t_enemy *enemy, char **map, t_mlx *mlx)
 {
 	map[enemy->coor->y][enemy->coor->x] = '0';
-	mlx_put_image_to_window(mlx, mlx->win, mlx->ground,
-		enemy->coor->x * mlx->dim->x, enemy->coor->y * mlx->dim->y);
+	image_put(mlx, mlx->ground, enemy->coor->x, enemy->coor->y);
 	map[enemy->coor->y][enemy->coor->x + enemy->direction] = 'B';
 	enemy->coor->x += enemy->direction;
-	mlx_put_image_to_window(mlx, mlx->win, mlx->enemy,
-		enemy->coor->x * mlx->dim->x, enemy->coor->y * mlx->dim->y);
+	image_put(mlx, mlx->ground, enemy->coor->x, enemy->coor->y);
+	image_put(mlx, mlx->enemy, enemy->coor->x, enemy->coor->y);
 }
 
 /*	Movement position is set to either increase or decrease in either the x
@@ -91,7 +92,8 @@ void	enemy_movement(t_enemy *enemy, t_tile *tile, char **map, t_mlx *mlx)
 			update_enemy(bad, map, mlx);
 		bad = bad->next;
 	}
-	player_collision(enemy, tile);
+	if (!tile->quit)
+		player_collision(enemy, tile);
 }
 
 /*	Checks to see if the player's position is the same as the enemies. If
@@ -108,7 +110,7 @@ void	player_collision(t_enemy *enemy, t_tile *tile)
 			&& tile->player->y == bad->coor->y)
 		{
 			ft_printf("Game over!");
-			tile->quit = 0;
+			tile->quit = 2;
 		}
 		bad = bad->next;
 	}

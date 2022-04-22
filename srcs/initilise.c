@@ -44,7 +44,7 @@ t_tile	*tile_init(void)
 	tile = malloc(sizeof(*tile) * 7);
 	tile->player = malloc(sizeof(int) * 2);
 	tile->max = malloc(sizeof(int) * 2);
-	tile->quit = 1;
+	tile->quit = 0;
 	tile->item_count = 0;
 	tile->item_total = 0;
 	tile->move_count = 0;
@@ -80,68 +80,66 @@ void	initialise_map(t_tile *tile, char **map, t_mlx *mlx)
 				image_put(mlx, mlx->enemy, x, y);
 		}
 	}
-	image_put(mlx, mlx->ins, 0, y);
+	image_put(mlx, mlx->ins, 5, y);
 }
 
-/*	Creates an mlx instance and a graphical window, then assigns 
-	all of the images into pointers. The tile size is determined
-	by the dimensions of the floor tiles, so that image is initialised
-	first. The window size is the maximum x and y coordiates multiplied
-	by the floor tile size.	*/
+/*	Compiles all of the structures used by the key hook into one
+	larger structure so that all of the data can be used in later
+	functions. I really wish I could use global variables.	*/
 
-t_mlx	*init_mlx(t_tile *tile)
+void	collect_data(t_list *map_list, t_tile *tile)
 {
-	int		x;
-	int		y;
 	t_mlx	*mlx;
+	t_data	*data;
+	t_enemy	*enemy;
+	t_num	*num;
+	char	**map;
 
-	mlx = malloc(sizeof(*mlx));
-	mlx->dim = malloc(sizeof(int) * 2);
-	mlx->mlx = mlx_init();
-	mlx->ground = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/floor.xpm", &mlx->dim->x, &mlx->dim->y);
-	mlx->win = mlx_new_window(mlx->mlx, tile->max->x * mlx->dim->x,
-			(tile->max->y * mlx->dim->y) + 50, "So Long!");
-	mlx->player = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/player.xpm", &x, &y);
-	mlx->wall = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/wall.xpm", &x, &y);
-	mlx->exit = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/exit.xpm", &x, &y);
-	mlx->item = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/item.xpm", &x, &y);
-	mlx->enemy = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/enemy.xpm", &x, &y);
-	mlx->ins = mlx_xpm_file_to_image(mlx->mlx,
-			"game_images/instructions.xpm", &x, &y);
-	return (mlx);
+	num = NULL;
+	enemy = new_enemy(0, 0);
+	map = map_init(map_list);
+	rectangle_check(map, tile, enemy);
+	enemy = find_pieces(map, tile, enemy);
+	error_check(map, tile, enemy);
+	data = malloc(sizeof(*data));
+	mlx = init_mlx(tile);
+	num = get_numbers(mlx, num);
+	image_put(mlx, num->zero, 0, tile->max->y);
+	data->num = num;
+	data->map = map;
+	data->mlx = mlx;
+	data->tile = tile;
+	data->enemy = enemy;
+	initialise_map(tile, map, mlx);
+	user_input(data);
 }
 
-t_num	*get_numbers(t_mlx *mlx, t_num *num)
-{
-	int		x;
-	int		y;
+/*	Performs a basic check to see if the correct number
+	of arguments has been input and that a valid file extension
+	was used, then imports the map into a linked list.	*/
 
-	num = malloc(sizeof(*num));
-	num->zero = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/zero.xpm", &x, &y);
-	num->one = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/one.xpm", &x, &y);
-	num->two = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/two.xpm", &x, &y);
-	num->three = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/three.xpm", &x, &y);
-	num->four = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/four.xpm", &x, &y);
-	num->five = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/five.xpm", &x, &y);
-	num->six = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/six.xpm", &x, &y);
-	num->seven = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/seven.xpm", &x, &y);
-	num->eight = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/eight.xpm", &x, &y);
-	num->nine = mlx_xpm_file_to_image(mlx->mlx,
-			"numbers/nine.xpm", &x, &y);
-	return (num);
+int	main(int ac, char **av)
+{
+	char	*line;
+	int		fd;
+	t_tile	*tile;
+	t_list	*map_list;
+
+	if (ac != 2)
+	{
+		ft_printf("Error\nIncorrect Number of Arguments.\n");
+		return (1);
+	}
+	valid_input(av[1]);
+	tile = tile_init();
+	fd = open(av[1], O_RDONLY);
+	line = get_next_line(fd);
+	map_list = ft_lstnew(line);
+	while (line)
+	{
+		line = get_next_line(fd);
+		ft_lstadd_back(&map_list, ft_lstnew(line));
+	}
+	collect_data(map_list, tile);
+	return (0);
 }

@@ -69,6 +69,8 @@ typedef struct s_mlx
 	void			*item;
 	void			*enemy;
 	void			*ins;
+	void			*success;
+	void			*gameover;
 }	t_mlx;
 
 typedef struct s_data
@@ -93,11 +95,14 @@ t_mlx	*init_mlx(t_tile *tile);
 char	**map_init(t_list *map_list);
 t_tile	*tile_init(void);
 t_num	*get_numbers(t_mlx *mlx, t_num *num);
+void	image_extras(t_mlx *mlx);
 
 /*	Input from users	*/
 
 void	user_input(t_data *data);
 int		key_press(int key, t_data *data);
+void	game_over(t_data *data);
+int		pause_game(int key, t_data *data);
 
 /*	Movement functions	*/
 
@@ -121,12 +126,12 @@ void	player_collision(t_enemy *enemy, t_tile *tile);
 /*	Error checking	*/
 
 void	valid_input(char *str);
-void	error_check(char **map, t_tile *tile);
-void	rectangle_check(char **map, t_tile *tile);
+void	error_check(char **map, t_tile *tile, t_enemy *enemy);
+void	rectangle_check(char **map, t_tile *tile, t_enemy *enemy);
 
 /*	Exit program	*/
 
-void	exit_program(t_tile *tile, char **map);
+void	exit_program(t_tile *tile, char **map, t_enemy *enemy);
 void	free_mlx(t_mlx *mlx);
 void	free_map(char **map);
 void	free_tile(t_tile *tile);
@@ -136,5 +141,6 @@ void	free_enemy(t_enemy *enemy);
 
 void	image_put(t_mlx *mlx, void *img, int x, int y);
 void	print_count(int count, t_mlx *mlx, t_tile *tile, t_num *num);
+void	count_setup(t_mlx *mlx, t_tile *tile, t_num *num, int key);
 
 #endif

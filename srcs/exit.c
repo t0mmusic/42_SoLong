@@ -6,11 +6,14 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 10:30:00 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/21 10:00:54 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/22 13:58:05 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "solong.h"
+
+/*	Frees the enemy list one element at a time, including the saved coordinates
+	of each enemy.	*/
 
 void	free_enemy(t_enemy *enemy)
 {
@@ -27,6 +30,9 @@ void	free_enemy(t_enemy *enemy)
 	free(enemy);
 }
 
+/*	frees the coordinates set for the boundaries of the map and the position
+	of the player, and then frees the structure.	*/
+
 void	free_tile(t_tile *tile)
 {
 	free(tile->max);
@@ -34,12 +40,17 @@ void	free_tile(t_tile *tile)
 	free(tile);
 }
 
+/*	removes the mlx window safely and frees the structure.	*/
+
 void	free_mlx(t_mlx *mlx)
 {
 	mlx_destroy_window(mlx->mlx, mlx->win);
 	free(mlx->dim);
 	free(mlx);
 }
+
+/*	Frees each line of the map array from top to bottom, and then
+	frees the map itself.	*/
 
 void	free_map(char **map)
 {
@@ -55,8 +66,12 @@ void	free_map(char **map)
 	free(map);
 }
 
-void	exit_program(t_tile *tile, char **map)
+/*	Frees the memory for the structures and the map array and then
+	exits the program.	*/
+
+void	exit_program(t_tile *tile, char **map, t_enemy *enemy)
 {
+	free_enemy(enemy);
 	free_tile(tile);
 	free_map(map);
 	exit(0);

@@ -6,7 +6,7 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/14 13:47:38 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/14 13:48:10 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/22 13:58:11 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /*	Checks that map is rectangular. */
 
-void	rectangle_check(char **map, t_tile *tile)
+void	rectangle_check(char **map, t_tile *tile, t_enemy *enemy)
 {
 	int		i;
 	size_t	len;
@@ -26,7 +26,7 @@ void	rectangle_check(char **map, t_tile *tile)
 		if (len != ft_strlen(map[i]))
 		{
 			ft_printf("Error\nMap Must Be Rectangular.\n");
-			exit_program(tile, map);
+			exit_program(tile, map, enemy);
 		}
 		i++;
 	}

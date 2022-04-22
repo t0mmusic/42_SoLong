@@ -125,7 +125,7 @@ int	tile_check(char **map, t_tile *tile, char c)
 /*	Checks if there is an error with the input map and prints
 	an error message.	*/
 
-void	error_check(char **map, t_tile *tile)
+void	error_check(char **map, t_tile *tile, t_enemy *enemy)
 {
 	int	error;
 
@@ -135,13 +135,13 @@ void	error_check(char **map, t_tile *tile)
 	if (error)
 	{
 		ft_printf("Error\nMap Border Must Be Solid.\n");
-		exit_program(tile, map);
+		exit_program(tile, map, enemy);
 	}
 	error += player_check(map, tile);
 	if (error)
 	{
 		ft_printf("Error\nMap Must Contain Exactly One Player.\n");
-		exit_program(tile, map);
+		exit_program(tile, map, enemy);
 	}
 	error += tile_check(map, tile, 'E');
 	error += tile_check(map, tile, 'C');
@@ -149,6 +149,6 @@ void	error_check(char **map, t_tile *tile)
 	{
 		ft_printf("Error\nMap Must Contain At Least");
 		ft_printf(" One Collectable And One Exit.\n");
-		exit_program(tile, map);
+		exit_program(tile, map, enemy);
 	}
 }

@@ -27,8 +27,9 @@ $(NAME):
 	@$(COMPILE_PRINTF)
 	@$(MAKE) bonus -C ./printf >/dev/null
 	@$(COMPILE_SOLONG)
-	@$(CC) $(CFLAGS) main.c $(SRCS) $(PRINTF_A) $(GET_NEXT_LINE) $(MLX_FLAGS) -D BUFFER_SIZE=100 -o $(NAME) >/dev/null
+	@$(CC) $(CFLAGS) $(SRCS) $(PRINTF_A) $(GET_NEXT_LINE) $(MLX_FLAGS) -D BUFFER_SIZE=100 -o $(NAME) >/dev/null
 	@$(COMPILE_COMPLETE)
+
 bonus: all
 
 clean:

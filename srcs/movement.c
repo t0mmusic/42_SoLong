@@ -6,7 +6,7 @@
 /*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:20:55 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/21 10:06:04 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/04/22 14:32:23 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,13 +18,11 @@
 
 void	map_update(t_mlx *mlx, t_tile *tile, int x, int y)
 {
-	mlx_put_image_to_window(mlx, mlx->win, mlx->ground,
-		x * mlx->dim->x, y * mlx->dim->y);
+	image_put(mlx, mlx->ground, x, y);
 	if (tile->exit_swap)
-		mlx_put_image_to_window(mlx, mlx->win, mlx->exit,
-			x * mlx->dim->x + 2, y * mlx->dim->y);
-	mlx_put_image_to_window(mlx, mlx->win, mlx->player,
-		tile->player->x * mlx->dim->x, tile->player->y * mlx->dim->y);
+		image_put(mlx, mlx->exit, x, y);
+	image_put(mlx, mlx->ground, tile->player->x, tile->player->y);
+	image_put(mlx, mlx->player, tile->player->x, tile->player->y);
 }
 
 /*	Checks what was on the space that the player just moved to. If
@@ -49,7 +47,7 @@ void	move_player(char **map, t_tile *tile, int x, int y)
 		else
 		{
 			ft_printf("Success!\n");
-			tile->quit = 0;
+			tile->quit = 1;
 		}
 	}
 	if (map[tile->player->y][tile->player->x] == 'C')
