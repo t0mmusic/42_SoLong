@@ -21,4 +21,4 @@ The map must be rectangular to be valid.
 The game now has enemies that move back and forth and cause a 'game over' when the player interacts with them.
 There is also a counter in the window showing how many moves the player has made.
 ## Status
-Ongoing. Game is complete with bonuses and ready to be submitted.
+Complete! Project passes with 118% with some bonuses.
