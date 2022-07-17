@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   loop.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 12:01:59 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/22 13:58:26 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/16 18:49:57 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ void	game_over(t_data *data)
 	if (data->tile->quit == 2)
 		image_put(data->mlx, data->mlx->gameover, 9, data->tile->max->y);
 	key = mlx_key_hook(data->mlx->win, pause_game, data);
+	(void)key;
 	mlx_loop(data->mlx->mlx);
 }
 
@@ -62,12 +63,10 @@ int	key_press(int key, t_data *data)
 	t_mlx	*mlx;
 	t_tile	*tile;
 	char	**map;
-	t_enemy	*enemy;
 
 	map = data->map;
 	tile = data->tile;
 	mlx = data->mlx;
-	enemy = data->enemy;
 	if (key == 13 || key == 0 || key == 1 || key == 2)
 		move_check(key, map, tile, mlx);
 	count_setup(mlx, tile, data->num, key);
@@ -91,5 +90,6 @@ void	user_input(t_data *data)
 	int		key;
 
 	key = mlx_key_hook(data->mlx->win, key_press, data);
+	(void)key;
 	mlx_loop(data->mlx->mlx);
 }
