@@ -11,6 +11,7 @@ gnl/
 !solong.h
 headers/**
 mlx_linux/
+mlx/
 objects/
 printf/
 solong

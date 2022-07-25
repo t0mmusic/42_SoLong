@@ -15,10 +15,15 @@ OBJS = $(SRCS:srcs/%.c=objects/%.o)
 
 GNL = gnl
 
-MLX = mlx_linux
+MLX = headers/mlx.h
 
-MLX_LINUX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
+UNAME := $(shell uname)
+
+ifeq ($(UNAME), Linux)
+MLX_FLAGS = -Lmlx -lmlx_Linux -L/usr/lib -Imlx -lXext -lX11 -lm -lz
+else
 MLX_FLAGS = -Imlx -Lmlx -lmlx -framework OpenGL -framework AppKit
+endif
 
 RM = rm -f
 
@@ -37,19 +42,22 @@ COMPILE_COMPLETE = echo "Ready! To play the game:\n./solong maps/<map name>"
 
 all: $(NAME)
 
-$(NAME): $(GNL) $(PRINTF) $(OBJS)
-	@$(COMPILE_SOLONG)
-	@$(CC) $(CFLAGS) $(OBJS) $(PRINTF_A) $(MLX_LINUX_FLAGS) $(GET_NEXT_LINE) -o $(NAME) >/dev/null
-	@$(COMPILE_COMPLETE)
+$(NAME): $(GNL) $(PRINTF) $(MLX) $(OBJS)
+	@if [ $(MLX) ]; then \
+	$(COMPILE_SOLONG); \
+	$(CC) $(CFLAGS) $(OBJS) $(PRINTF_A) $(MLX_FLAGS) $(GET_NEXT_LINE) -o $(NAME) >/dev/null; \
+	$(COMPILE_COMPLETE); \
+	fi
 
 bonus: all
 
 $(GNL):
-	if [ ! -d "gnl/" ]; then\
+	@if [ ! -d "gnl/" ]; then\
 		printf "get_next_line dependency needed. Download now? [y/N]" \
 		&& read ans && [ $${ans:-N} = y ] \
-		git clone https://github.com/t0mmusic/get_next_line.git gnl; \
+		&& git clone https://github.com/t0mmusic/get_next_line.git gnl; \
 	fi
+	@cp -r gnl/get_next_line.h $(HEADER_DEST)
 
 $(PRINTF):
 	@$(COMPILE_PRINTF)
@@ -58,21 +66,28 @@ $(PRINTF):
 		&& read ans && [ $${ans:-N} = y ] \
 		&& git clone https://github.com/t0mmusic/ft_printf.git printf; \
 	fi
-	@$(MAKE) bonus -C ./printf >/dev/null
+	@$(MAKE) bonus -C ./printf --no-print-directory
 	@cp -r printf/$(ARCHIVE_DEST) $(ARCHIVE_DEST)
 	@cp -r printf/$(OBJ_DEST) $(OBJ_DEST)
 	@cp -r printf/$(HEADER_DEST)/. $(HEADER_DEST)
 
 $(MLX):
-	@if [ ! -d "mlx_linux/" ]; then\
-		mlx "printf dependency needed. Download now? [y/N]" \
-		&& read ans && [ $${ans:-N} = y ] \
-		&& git clone https://github.com/42Paris/minilibx-linux.git mlx_linux; \
+	@if [ $(UNAME) != Linux ]; then \
+		printf "MacOS mlx repository must be downloaded separately.\n";\
 	fi
-	bash mlx_linux/configure
+	@if [ ! -d "mlx/" ]; then\
+		printf "mlx dependency needed. Download now? [y/N]" \
+		&& read ans && [ $${ans:-N} = y ] \
+		&& git clone https://github.com/42Paris/minilibx-linux.git mlx; \
+		cd mlx && bash configure;\
+		cd .. && cp -r mlx/mlx.h $(HEADER_DEST); \
+	fi
 
 objects/%.o: srcs/%.c
-	@$(CC) $(CFLAGS) $(MLX_LINUX_FLAGS) -c $< -o $@
+	@if [ $(MLX) ]; then \
+	$(CC) $(CFLAGS) $(MLX_LINUX_FLAGS) -c $< -o $@; \
+	printf "Linked source: %s into object: %s\n" $< $@; \
+	fi
 
 clean:
 	@$(REMOVE_MESSAGE)
