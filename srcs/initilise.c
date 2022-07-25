@@ -41,9 +41,10 @@ t_tile	*tile_init(void)
 {
 	t_tile	*tile;
 
-	tile = malloc(sizeof(*tile) * 7);
+	tile = malloc(sizeof(*tile) + sizeof(int) * 7 + sizeof(t_coor));
 	tile->player = malloc(sizeof(int) * 2);
-	tile->max = malloc(sizeof(int) * 2);
+	tile->max_x = 0;
+	tile->max_y = 0;
 	tile->quit = 0;
 	tile->item_count = 0;
 	tile->item_total = 0;
@@ -62,10 +63,10 @@ void	initialise_map(t_tile *tile, char **map, t_mlx *mlx)
 	int	y;
 
 	y = -1;
-	while (++y < tile->max->y)
+	while (++y < tile->max_y)
 	{
 		x = -1;
-		while (++x < tile->max->x)
+		while (++x < tile->max_x)
 		{
 			image_put(mlx, mlx->ground, x, y);
 			if (map[y][x] == 'C')
@@ -101,10 +102,10 @@ void	collect_data(t_list *map_list, t_tile *tile)
 	rectangle_check(map, tile, enemy);
 	enemy = find_pieces(map, tile, enemy);
 	error_check(map, tile, enemy);
-	data = malloc(sizeof(*data));
+	data = malloc(sizeof(*data) + sizeof(*mlx));
 	mlx = init_mlx(tile);
 	num = get_numbers(mlx, num);
-	image_put(mlx, num->zero, 0, tile->max->y);
+	image_put(mlx, num->zero, 0, tile->max_y);
 	data->num = num;
 	data->map = map;
 	data->mlx = mlx;

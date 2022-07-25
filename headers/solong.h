@@ -18,6 +18,12 @@
 # include <fcntl.h>
 # include "mlx.h"
 
+# define UP 119
+# define DOWN 115
+# define LEFT 97
+# define RIGHT 100
+# define EXIT 65307
+
 typedef struct s_num
 {
 	void	*zero;
@@ -42,7 +48,8 @@ typedef struct s_coor
 typedef struct s_tile
 {
 	struct s_coor	*player;
-	struct s_coor	*max;
+	int				max_x;
+	int				max_y;
 	int				item_count;
 	int				item_total;
 	int				move_count;

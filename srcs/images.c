@@ -6,7 +6,7 @@
 /*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 13:13:04 by jbrown            #+#    #+#             */
-/*   Updated: 2022/07/16 18:33:02 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/25 13:19:00 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 void	image_put(t_mlx *mlx, void *img, int x, int y)
 {
-	mlx_put_image_to_window(mlx, mlx->win,
+	mlx_put_image_to_window(mlx->mlx, mlx->win,
 		img, x * mlx->dim->x, y * mlx->dim->y);
 }
 
@@ -40,8 +40,8 @@ t_mlx	*init_mlx(t_tile *tile)
 	mlx->mlx = mlx_init();
 	mlx->ground = mlx_xpm_file_to_image(mlx->mlx,
 			"tiles/floor.xpm", &mlx->dim->x, &mlx->dim->y);
-	mlx->win = mlx_new_window(mlx->mlx, tile->max->x * mlx->dim->x,
-			(tile->max->y * mlx->dim->y) + mlx->dim->y, "So Long!");
+	mlx->win = mlx_new_window(mlx->mlx, tile->max_x * mlx->dim->x,
+			(tile->max_y * mlx->dim->y) + mlx->dim->y, "So Long!");
 	mlx->player = mlx_xpm_file_to_image(mlx->mlx,
 			"tiles/player.xpm", &x, &y);
 	mlx->wall = mlx_xpm_file_to_image(mlx->mlx,

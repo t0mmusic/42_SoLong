@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/31 16:20:55 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/22 14:32:23 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/25 13:27:07 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,13 @@ void	move_check(int input, char **map, t_tile *tile, t_mlx *mlx)
 
 	x = tile->player->x;
 	y = tile->player->y;
-	if (input == 13 && map[y - 1][x] != '1')
+	if (input == UP && map[y - 1][x] != '1')
 		tile->player->y--;
-	if (input == 0 && map[y][x - 1] != '1')
+	if (input == LEFT && map[y][x - 1] != '1')
 		tile->player->x--;
-	if (input == 1 && map[y + 1][x] != '1')
+	if (input == DOWN && map[y + 1][x] != '1')
 		tile->player->y++;
-	if (input == 2 && map[y][x + 1] != '1')
+	if (input == RIGHT && map[y][x + 1] != '1')
 		tile->player->x++;
 	if (!(x == tile->player->x && y == tile->player->y))
 	{

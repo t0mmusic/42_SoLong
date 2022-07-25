@@ -6,7 +6,7 @@
 /*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/22 12:01:59 by jbrown            #+#    #+#             */
-/*   Updated: 2022/07/16 18:49:57 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/25 13:37:06 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	pause_game(int key, t_data *data)
 	map = data->map;
 	tile = data->tile;
 	enemy = data->enemy;
-	if (key == 53)
+	if (key == EXIT)
 	{
 		free_mlx(data->mlx);
 		free(data->num);
@@ -41,9 +41,9 @@ void	game_over(t_data *data)
 	int	key;
 
 	if (data->tile->quit == 1)
-		image_put(data->mlx, data->mlx->success, 9, data->tile->max->y);
+		image_put(data->mlx, data->mlx->success, 9, data->tile->max_y);
 	if (data->tile->quit == 2)
-		image_put(data->mlx, data->mlx->gameover, 9, data->tile->max->y);
+		image_put(data->mlx, data->mlx->gameover, 9, data->tile->max_y);
 	key = mlx_key_hook(data->mlx->win, pause_game, data);
 	(void)key;
 	mlx_loop(data->mlx->mlx);
@@ -67,12 +67,14 @@ int	key_press(int key, t_data *data)
 	map = data->map;
 	tile = data->tile;
 	mlx = data->mlx;
-	if (key == 13 || key == 0 || key == 1 || key == 2)
+	if (key == UP || key == DOWN || key == LEFT || key == RIGHT)
+	{
 		move_check(key, map, tile, mlx);
+		if (data->enemy->coor->x != 0)
+			enemy_movement(data->enemy, tile, map, mlx);
+	}
 	count_setup(mlx, tile, data->num, key);
-	if (data->enemy->coor->x != 0)
-		enemy_movement(data->enemy, tile, map, mlx);
-	if (key == 53)
+	if (key == EXIT)
 	{
 		pause_game(key, data);
 	}

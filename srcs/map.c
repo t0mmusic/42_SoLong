@@ -37,11 +37,11 @@ void	find_map_max(char **map, t_tile *tile)
 	i = 0;
 	while (map[0][i])
 		i++;
-	tile->max->x = i - 2;
+	tile->max_x = i - 2;
 	i = 0;
 	while (map[i])
 		i++;
-	tile->max->y = i;
+	tile->max_y = i;
 }
 
 /*	Finds the location of the player and the total number of
@@ -69,7 +69,7 @@ t_enemy	*find_pieces(char **map, t_tile *tile, t_enemy *list)
 	y = 1;
 	x = 1;
 	find_map_max(map, tile);
-	while (y < tile->max->y)
+	while (y < tile->max_y)
 	{
 		if (map[y][x] == 'P' || map[y][x] == 'C')
 			set_coordinates(tile, map[y][x], x, y);
@@ -77,7 +77,7 @@ t_enemy	*find_pieces(char **map, t_tile *tile, t_enemy *list)
 		{
 			list = add_enemy(list, new_enemy(x, y));
 		}
-		if (x < tile->max->x)
+		if (x < tile->max_x)
 			x++;
 		else
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jbrown <jbrown@student.42.fr>              +#+  +:+       +#+        */
+/*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/01 10:30:00 by jbrown            #+#    #+#             */
-/*   Updated: 2022/04/22 13:58:05 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/25 12:54:01 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	free_enemy(t_enemy *enemy)
 
 void	free_tile(t_tile *tile)
 {
-	free(tile->max);
 	free(tile->player);
 	free(tile);
 }

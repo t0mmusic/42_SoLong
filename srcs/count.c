@@ -6,7 +6,7 @@
 /*   By: jbrown <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/04/21 11:16:03 by jbrown            #+#    #+#             */
-/*   Updated: 2022/07/16 18:33:02 by jbrown           ###   ########.fr       */
+/*   Updated: 2022/07/25 12:52:29 by jbrown           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,25 +28,25 @@ void	count_setup(t_mlx *mlx, t_tile *tile, t_num *num, int key)
 void	find_num(int count, t_mlx *mlx, t_tile *tile, t_num *num)
 {
 	if (count == 0)
-		image_put(mlx, num->zero, num->position, tile->max->y);
+		image_put(mlx, num->zero, num->position, tile->max_y);
 	if (count == 1)
-		image_put(mlx, num->one, num->position, tile->max->y);
+		image_put(mlx, num->one, num->position, tile->max_y);
 	if (count == 2)
-		image_put(mlx, num->two, num->position, tile->max->y);
+		image_put(mlx, num->two, num->position, tile->max_y);
 	if (count == 3)
-		image_put(mlx, num->three, num->position, tile->max->y);
+		image_put(mlx, num->three, num->position, tile->max_y);
 	if (count == 4)
-		image_put(mlx, num->four, num->position, tile->max->y);
+		image_put(mlx, num->four, num->position, tile->max_y);
 	if (count == 5)
-		image_put(mlx, num->five, num->position, tile->max->y);
+		image_put(mlx, num->five, num->position, tile->max_y);
 	if (count == 6)
-		image_put(mlx, num->six, num->position, tile->max->y);
+		image_put(mlx, num->six, num->position, tile->max_y);
 	if (count == 7)
-		image_put(mlx, num->seven, num->position, tile->max->y);
+		image_put(mlx, num->seven, num->position, tile->max_y);
 	if (count == 8)
-		image_put(mlx, num->eight, num->position, tile->max->y);
+		image_put(mlx, num->eight, num->position, tile->max_y);
 	if (count == 9)
-		image_put(mlx, num->nine, num->position, tile->max->y);
+		image_put(mlx, num->nine, num->position, tile->max_y);
 }
 
 /*	Figures out which position the current number will be printed.

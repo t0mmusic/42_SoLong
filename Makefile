@@ -3,7 +3,7 @@ CC = gcc
 CFLAGS = -Wall -Werror -Wextra -Iheaders
 
 
-PRINTF_A = printf/libftprintf.a
+PRINTF_A = archives/libftprintf.a
 
 OBJ_DEST = objects
 HEADER_DEST = headers
@@ -15,6 +15,8 @@ OBJS = $(SRCS:srcs/%.c=objects/%.o)
 
 GNL = gnl
 
+MLX = mlx_linux
+
 MLX_LINUX_FLAGS = -Lmlx_linux -lmlx_Linux -L/usr/lib -Imlx_linux -lXext -lX11 -lm -lz
 MLX_FLAGS = -Imlx -Lmlx -lmlx -framework OpenGL -framework AppKit
 
@@ -25,7 +27,7 @@ SRCS = srcs/count.c srcs/enemy.c srcs/error.c srcs/exit.c srcs/images.c \
 
 CHECKER = tester/checker.c
 
-GET_NEXT_LINE = gnl/get_next_line.c
+GET_NEXT_LINE = gnl/get_next_line.c -D BUFFER_SIZE=100
 
 REMOVE_MESSAGE = echo "removing object files"
 REMOVE_ARCHIVE = echo "removing archives and application"
@@ -37,7 +39,7 @@ all: $(NAME)
 
 $(NAME): $(GNL) $(PRINTF) $(OBJS)
 	@$(COMPILE_SOLONG)
-	@$(CC) $(CFLAGS) objects/* $(MLX_LINUX_FLAGS) $(GET_NEXT_LINE) -D BUFFER_SIZE=100 -o $(NAME) >/dev/null
+	@$(CC) $(CFLAGS) $(OBJS) $(PRINTF_A) $(MLX_LINUX_FLAGS) $(GET_NEXT_LINE) -o $(NAME) >/dev/null
 	@$(COMPILE_COMPLETE)
 
 bonus: all
@@ -60,6 +62,14 @@ $(PRINTF):
 	@cp -r printf/$(ARCHIVE_DEST) $(ARCHIVE_DEST)
 	@cp -r printf/$(OBJ_DEST) $(OBJ_DEST)
 	@cp -r printf/$(HEADER_DEST)/. $(HEADER_DEST)
+
+$(MLX):
+	@if [ ! -d "mlx_linux/" ]; then\
+		mlx "printf dependency needed. Download now? [y/N]" \
+		&& read ans && [ $${ans:-N} = y ] \
+		&& git clone https://github.com/42Paris/minilibx-linux.git mlx_linux; \
+	fi
+	bash mlx_linux/configure
 
 objects/%.o: srcs/%.c
 	@$(CC) $(CFLAGS) $(MLX_LINUX_FLAGS) -c $< -o $@

@@ -24,7 +24,7 @@ int	top_bottom_check(char **map, t_tile *tile)
 	while (1)
 	{
 		x = 0;
-		while (map[y][x] && x < tile->max->x)
+		while (map[y][x] && x < tile->max_x)
 		{
 			if (map[y][x] != '1')
 			{
@@ -33,7 +33,7 @@ int	top_bottom_check(char **map, t_tile *tile)
 			x++;
 		}
 		if (y == 0)
-			y = tile->max->y - 1;
+			y = tile->max_y - 1;
 		else
 			break ;
 	}
@@ -52,7 +52,7 @@ int	side_check(char **map, t_tile *tile)
 	while (1)
 	{
 		y = 0;
-		while (y < tile->max->y && map[y][x])
+		while (y < tile->max_y && map[y][x])
 		{
 			if (map[y][x] != '1')
 			{
@@ -61,7 +61,7 @@ int	side_check(char **map, t_tile *tile)
 			y++;
 		}
 		if (x == 0)
-			x = tile->max->x - 1;
+			x = tile->max_x - 1;
 		else
 			break ;
 	}
@@ -79,10 +79,10 @@ int	player_check(char **map, t_tile *tile)
 
 	y = 1;
 	player_count = 0;
-	while (y < tile->max->y)
+	while (y < tile->max_y)
 	{
 		x = 1;
-		while (x < tile->max->x)
+		while (x < tile->max_x)
 		{
 			if (map[y][x] == 'P')
 				player_count++;
@@ -106,10 +106,10 @@ int	tile_check(char **map, t_tile *tile, char c)
 
 	y = 1;
 	count = 0;
-	while (y < tile->max->y)
+	while (y < tile->max_y)
 	{
 		x = 1;
-		while (x < tile->max->x)
+		while (x < tile->max_x)
 		{
 			if (map[y][x] == c)
 			count++;
